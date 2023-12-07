@@ -1,15 +1,18 @@
 import express, { Express, Response } from 'express';
 import axios from 'axios';
+import cors from 'cors';
 import 'dotenv/config';
 
 const app: Express = express();
+app.use(cors());
 const port = 8000;
 
 app.get('/', (_, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.get('/test', (_, res: Response) => {
+// pages are parameters that are numbers. If you do not pass a page you get everything. Each page contains 100 deals
+app.get('/test', cors(), (_, res: Response) => {
   const options = {
     method: 'GET',
     url: 'https://developer.woot.com/feed/Home',

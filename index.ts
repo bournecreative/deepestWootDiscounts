@@ -32,7 +32,3 @@ app.get('/', cors(), (_, res: Response) => {
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
-
-// app.get('/', (_, res: Response) => {
-//   res.send('Express + TypeScript Server');
-// });

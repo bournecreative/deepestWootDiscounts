@@ -22,7 +22,7 @@ export interface WootItem {
   Subtitle: null;
   Title: string;
   Url: string;
-  Savings?: number;
+  Savings?: string;
 }
 
 export const Home = () => {
@@ -44,9 +44,9 @@ export const Home = () => {
         if (a.ListPrice && b.ListPrice) {
           const aSavings = a.ListPrice.Minimum - a.SalePrice.Minimum;
           const bSavings = b.ListPrice.Minimum - b.SalePrice.Minimum;
-          a.Savings = Math.round(aSavings);
-          b.Savings = Math.round(bSavings);
-          return Math.floor(bSavings - aSavings);
+          a.Savings = aSavings.toFixed(2);
+          b.Savings = bSavings.toFixed(2);
+          return Number(bSavings) - Number(aSavings);
         }
       });
     setItems(filtered.slice(0, 100));

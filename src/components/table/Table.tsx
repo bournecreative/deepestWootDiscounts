@@ -8,25 +8,27 @@ interface TableDataProps {
 export const TableData: React.FC<TableDataProps> = ({ items }) => {
   return (
     <div className="table_data">
-      <table>
-        <tbody>
-          {items.length
-            ? items.map((item: WootItem, index) => {
-                return (
-                  <tr key={item.OfferId}>
-                    <td>{index}</td>
-                    <td>{item.Title}</td>
-                    <td>{item.ListPrice.Minimum}</td>
-                    <td>{item.Savings}</td>
-                    <td>
-                      <a href={item.Url}>Link</a>
-                    </td>
-                  </tr>
-                );
-              })
-            : '...loading'}
-        </tbody>
-      </table>
+      {items.length ? (
+        <table>
+          <tbody>
+            {items.map((item: WootItem, index) => {
+              return (
+                <tr key={item.OfferId}>
+                  <td>{index}</td>
+                  <td>{item.Title}</td>
+                  <td>{item.ListPrice.Minimum}</td>
+                  <td>{item.Savings}</td>
+                  <td>
+                    <a href={item.Url}>Link</a>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      ) : (
+        '...loading'
+      )}
     </div>
   );
 };

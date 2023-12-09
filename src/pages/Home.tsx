@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { fetchApi } from '../api';
 import { TableData } from '../components/table/Table';
+import { TreeMap } from '../components/treemap';
 
 export interface WootItem {
   Categories: [];
@@ -22,12 +23,13 @@ export interface WootItem {
   Subtitle: null;
   Title: string;
   Url: string;
-  Savings?: string;
+  Savings: string;
 }
 
 export const Home = () => {
   const [items, setItems] = useState<WootItem[] | []>([]);
   const isMounted = useRef(true);
+
   const getData = async () => {
     const data = await fetchApi();
     const filtered = data
@@ -36,7 +38,6 @@ export const Home = () => {
           i.ListPrice &&
           Math.floor(i.ListPrice.Minimum - i.SalePrice.Minimum) > 0
         ) {
-          console.log(i);
           return i;
         }
       })
@@ -53,9 +54,7 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    if (isMounted) {
-      getData();
-    }
+    getData();
     return () => {
       isMounted.current = false;
     };
@@ -63,6 +62,7 @@ export const Home = () => {
 
   return (
     <>
+      <TreeMap items={items} />
       <TableData items={items} />
     </>
   );

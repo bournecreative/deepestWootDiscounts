@@ -1,93 +1,103 @@
-console.log('test');
-// import React, { useRef, useLayoutEffect } from 'react';
-// import './App.css';
-// import * as am5 from '@amcharts/amcharts5';
-// import * as am5xy from '@amcharts/amcharts5/xy';
-// import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import * as am5 from '@amcharts/amcharts5';
+import * as am5hierarchy from '@amcharts/amcharts5/hierarchy';
+import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import { WootItem } from '../../pages/Home';
 
-// function App(props) {
-//   useLayoutEffect(() => {
-//     let root = am5.Root.new('chartdiv');
+interface TreeMapProps {
+  items: WootItem[];
+}
 
-//     root.setThemes([am5themes_Animated.new(root)]);
+interface chartDataObj {
+  name: string;
+  value: number;
+}
 
-//     let chart = root.container.children.push(
-//       am5xy.XYChart.new(root, {
-//         panY: false,
-//         layout: root.verticalLayout,
-//       }),
-//     );
+interface Test {
+  name: string;
+  children: chartDataObj[];
+}
 
-//     // Define data
-//     let data = [
-//       {
-//         category: 'Research',
-//         value1: 1000,
-//         value2: 588,
-//       },
-//       {
-//         category: 'Marketing',
-//         value1: 1200,
-//         value2: 1800,
-//       },
-//       {
-//         category: 'Sales',
-//         value1: 850,
-//         value2: 1230,
-//       },
-//     ];
+interface chartData {
+  name: string;
+  children: Test[];
+}
 
-//     // Create Y-axis
-//     let yAxis = chart.yAxes.push(
-//       am5xy.ValueAxis.new(root, {
-//         renderer: am5xy.AxisRendererY.new(root, {}),
-//       }),
-//     );
+export const TreeMap: React.FC<TreeMapProps> = ({ items }) => {
+  const [data, setData] = useState<chartData | undefined>();
 
-//     // Create X-Axis
-//     let xAxis = chart.xAxes.push(
-//       am5xy.CategoryAxis.new(root, {
-//         renderer: am5xy.AxisRendererX.new(root, {}),
-//         categoryField: 'category',
-//       }),
-//     );
-//     xAxis.data.setAll(data);
+  useEffect(() => {
+    const chartData: chartData = {
+      name: 'Root',
+      children: [{ name: 'top100', children: [] }],
+    };
 
-//     // Create series
-//     let series1 = chart.series.push(
-//       am5xy.ColumnSeries.new(root, {
-//         name: 'Series',
-//         xAxis: xAxis,
-//         yAxis: yAxis,
-//         valueYField: 'value1',
-//         categoryXField: 'category',
-//       }),
-//     );
-//     series1.data.setAll(data);
+    for (let i = 0; i < items.length; i++) {
+      const objData = {
+        name: items[i].Title,
+        value: Math.floor(Number(items[i].Savings)),
+      };
+      chartData.children[0].children.push(objData);
+    }
+    setData(chartData);
+  }, [items]);
 
-//     let series2 = chart.series.push(
-//       am5xy.ColumnSeries.new(root, {
-//         name: 'Series',
-//         xAxis: xAxis,
-//         yAxis: yAxis,
-//         valueYField: 'value2',
-//         categoryXField: 'category',
-//       }),
-//     );
-//     series2.data.setAll(data);
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
-//     // Add legend
-//     let legend = chart.children.push(am5.Legend.new(root, {}));
-//     legend.data.setAll(chart.series.values);
+  useLayoutEffect(() => {
+    const root = am5.Root.new('chartdiv');
 
-//     // Add cursor
-//     chart.set('cursor', am5xy.XYCursor.new(root, {}));
+    const myTheme = am5.Theme.new(root);
 
-//     return () => {
-//       root.dispose();
-//     };
-//   }, []);
+    myTheme.rule('HierarchyNode', ['depth0']).setAll({
+      forceHidden: true,
+    });
 
-//   return <div id="chartdiv" style={{ width: '100%', height: '500px' }}></div>;
-// }
-// export default App;
+    myTheme.rule('HierarchyNode', ['depth1']).setAll({
+      forceHidden: true,
+    });
+
+    root.setThemes([myTheme, am5themes_Animated.new(root)]);
+
+    const container = root.container.children.push(
+      am5.Container.new(root, {
+        width: am5.percent(100),
+        height: am5.percent(100),
+        layout: root.verticalLayout,
+      }),
+    );
+
+    const series = container.children.push(
+      am5hierarchy.Treemap.new(root, {
+        singleBranchOnly: false,
+        sort: 'descending',
+        downDepth: 1,
+        upDepth: -1,
+        initialDepth: 2,
+        valueField: 'value',
+        categoryField: 'name',
+        childDataField: 'children',
+        nodePaddingOuter: 0,
+        nodePaddingInner: 0,
+      }),
+    );
+
+    series.rectangles.template.setAll({
+      strokeWidth: 3,
+      cornerRadiusTL: 7,
+      cornerRadiusTR: 7,
+      cornerRadiusBL: 7,
+      cornerRadiusBR: 7,
+    });
+
+    series.data.setAll([data]);
+    series.set('selectedDataItem', series.dataItems[0]);
+    return () => {
+      root.dispose();
+    };
+  }, []);
+
+  return <div id="chartdiv" style={{ width: '100%', height: '500px' }}></div>;
+};

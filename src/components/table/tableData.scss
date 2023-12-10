@@ -1,5 +1,45 @@
-.table_data {
+.table_container {
+  background-color: #141414;
+  max-width: 1400px;
   width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
+}
+
+.table {
+  color: #f6f6f6;
+  border-collapse: collapse;
+  thead {
+    font-size: 14px;
+    tr {
+      background-color: #1c1c1c;
+    }
+    th {
+      padding: 16px;
+    }
+  }
+
+  th,
+  td,
+  tr {
+    padding: 12px;
+  }
+
+  tbody {
+    font-size: 14px;
+    font-weight: 100;
+    tr {
+      border-bottom: 1px solid #f6f6f6;
+      background-color: #141414;
+      &:hover {
+        background-color: #32b9c5;
+      }
+    }
+
+    td {
+      padding: 12px;
+    }
+  }
 }

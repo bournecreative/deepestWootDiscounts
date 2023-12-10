@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-import { fetchApi } from '../api';
+// import { fetchApi } from '../api';
 import { TableData } from '../components/table/Table';
 import { TreeMap } from '../components/treemap';
+import axios from 'axios';
 
 export interface WootItem {
   Categories: [];
@@ -27,43 +28,59 @@ export interface WootItem {
 }
 
 export const Home = () => {
-  const [items, setItems] = useState<WootItem[] | []>([]);
+  const [products, setProducts] = useState<WootItem[]>([]);
+  const [sortedProduct, setSortedProduct] = useState<WootItem[]>([]);
   const isMounted = useRef(true);
 
-  const getData = async () => {
-    const data = await fetchApi();
-    const filtered = data
-      .filter((i: WootItem) => {
-        if (
-          i.ListPrice &&
-          Math.floor(i.ListPrice.Minimum - i.SalePrice.Minimum) > 0
-        ) {
-          return i;
-        }
-      })
-      .sort((a: WootItem, b: WootItem) => {
-        if (a.ListPrice && b.ListPrice) {
+  const sortData = (data: WootItem[]) => {
+    if (data) {
+      const filtered = data
+        .filter((i: WootItem) => {
+          if (
+            i.ListPrice &&
+            Math.floor(i.ListPrice.Minimum - i.SalePrice.Minimum) > 0
+          ) {
+            return i;
+          }
+        })
+        .sort((a: WootItem, b: WootItem) => {
           const aSavings = a.ListPrice.Minimum - a.SalePrice.Minimum;
           const bSavings = b.ListPrice.Minimum - b.SalePrice.Minimum;
           a.Savings = aSavings.toFixed(2);
           b.Savings = bSavings.toFixed(2);
           return Number(bSavings) - Number(aSavings);
-        }
-      });
-    setItems(filtered.slice(0, 100));
+        });
+      setSortedProduct(filtered.slice(0, 100));
+    }
   };
 
   useEffect(() => {
-    getData();
+    async function fetchData() {
+      const response = await axios.get('http://localhost:8000');
+      setProducts(response.data);
+    }
+    if (isMounted) {
+      fetchData();
+    }
     return () => {
       isMounted.current = false;
     };
   }, []);
 
+  useEffect(() => {
+    if (isMounted) {
+      sortData(products);
+      console.log('products', products);
+    }
+    return () => {
+      isMounted.current = false;
+    };
+  }, [products]);
+
   return (
     <>
-      <TreeMap items={items} />
-      <TableData items={items} />
+      {/* <TreeMap items={sortedProduct} /> */}
+      <TableData items={sortedProduct} />
     </>
   );
 };

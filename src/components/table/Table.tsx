@@ -7,11 +7,11 @@ interface TableDataProps {
 
 export const TableData: React.FC<TableDataProps> = ({ items }) => {
   return (
-    <div className="table_data">
+    <div className="table_container">
       {items.length ? (
-        <table>
-          <thead>
-            <tr>
+        <table className="table">
+          <thead className="table_header">
+            <tr className="table_row">
               <th>#</th>
               <th>Deal Description</th>
               <th>List Price</th>
@@ -22,7 +22,7 @@ export const TableData: React.FC<TableDataProps> = ({ items }) => {
           <tbody>
             {items.map((item: WootItem, index) => {
               return (
-                <tr key={item.OfferId}>
+                <tr className="table_row" key={item.OfferId}>
                   <td>{index + 1}</td>
                   <td>{item.Title}</td>
                   <td>{item.ListPrice.Minimum}</td>

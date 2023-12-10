@@ -31,15 +31,20 @@
     font-size: 14px;
     font-weight: 100;
     tr {
-      border-bottom: 1px solid #f6f6f6;
       background-color: #141414;
       &:hover {
-        background-color: #32b9c5;
+        background-color: #2d959e;
       }
     }
-
+    tr:not(:last-of-type) {
+      border-bottom: 1px solid #f6f6f6;
+    }
     td {
       padding: 12px;
     }
+  }
+  a {
+    color: #f6f6f6;
+    text-decoration: none;
   }
 }

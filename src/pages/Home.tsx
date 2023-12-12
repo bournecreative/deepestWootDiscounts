@@ -70,7 +70,7 @@ export const Home = () => {
   useEffect(() => {
     if (isMounted) {
       sortData(products);
-      console.log('products', products);
+      // console.log('products', products);
     }
     return () => {
       isMounted.current = false;
@@ -79,7 +79,7 @@ export const Home = () => {
 
   return (
     <>
-      {/* <TreeMap items={sortedProduct} /> */}
+      <TreeMap elementId="chart" items={sortedProduct} />
       <TableData items={sortedProduct} />
     </>
   );

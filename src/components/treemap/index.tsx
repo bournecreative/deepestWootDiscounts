@@ -40,7 +40,7 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
       forceHidden: true,
     });
 
-    root.setThemes([myTheme, am5themes_Animated.new(root)]);
+    root.setThemes([am5themes_Animated.new(root), myTheme]);
 
     const container = root.container.children.push(
       am5.Container.new(root, {
@@ -65,17 +65,43 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
       }),
     );
 
-    series.rectangles.template.setAll({
-      strokeWidth: 3,
-      cornerRadiusTL: 7,
-      cornerRadiusTR: 7,
-      cornerRadiusBL: 7,
-      cornerRadiusBR: 7,
+    series.labels.template.setAll({
+      fontSize: 12,
+      text: '${value}',
     });
 
+    series
+      ?.get('colors')
+      ?.set('colors', [
+        am5.color(0x095256),
+        am5.color(0x087f8c),
+        am5.color(0x5aaa95),
+        am5.color(0x86a873),
+        am5.color(0xbb9f06),
+      ]);
+
     if (sortedData?.children[0].children.length) {
+      series.rectangles.template.adapters.add('fill', function (_, target) {
+        const value = (target.dataItem?.dataContext as chartDataObj).value;
+        const topSavings = sortedData?.children[0].children[0].value;
+        const higher = topSavings * 0.75;
+        const mid = topSavings * 0.5;
+        const low = topSavings * 0.25;
+        if (value <= low) {
+          // console.log((target.dataItem?.dataContext as chartDataObj).value);
+          return am5.color(0x00ccbf);
+        } else if (value <= mid) {
+          return am5.color(0x3f7c85);
+        } else if (value <= higher) {
+          return am5.color(0xff5f5d);
+        } else {
+          return am5.color(0x00ad76);
+        }
+      });
+
       series.data.setAll([sortedData]);
       series.set('selectedDataItem', series.dataItems[0]);
+      series.appear(1000, 100);
     }
 
     return () => {
@@ -103,7 +129,7 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
     <div
       ref={rootRef}
       id={elementId}
-      style={{ width: '100%', height: '500px' }}
+      style={{ width: '100%', height: '100dvh' }}
     ></div>
   );
 };

@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-// import { fetchApi } from '../api';
-import { TableData } from '../components/table/Table';
-import { TreeMap } from '../components/treemap';
 import axios from 'axios';
+import { TreeMap } from '../components/treemap';
+import { TableData } from '../components/table/Table';
+import './home-styles.scss';
 
 export interface WootItem {
   Categories: [];
@@ -79,8 +79,14 @@ export const Home = () => {
 
   return (
     <>
-      <TreeMap elementId="chart" items={sortedProduct} />
-      <TableData items={sortedProduct} />
+      <div className="container">
+        <div>
+          <TreeMap elementId="chart" items={sortedProduct} />
+        </div>
+        <div>
+          <TableData items={sortedProduct} />
+        </div>
+      </div>
     </>
   );
 };

@@ -31,7 +31,7 @@ export const Home = () => {
   const [products, setProducts] = useState<WootItem[]>([]);
   const [sortedProduct, setSortedProduct] = useState<WootItem[]>([]);
   const isMounted = useRef(true);
-
+  console.log('is Mounted', isMounted.current);
   const sortData = (data: WootItem[]) => {
     if (data) {
       const filtered = data
@@ -70,21 +70,21 @@ export const Home = () => {
   useEffect(() => {
     if (isMounted) {
       sortData(products);
-      // console.log('products', products);
     }
-    return () => {
-      isMounted.current = false;
-    };
   }, [products]);
 
   return (
     <>
       <div className="container">
         <div>
-          <TreeMap elementId="chart" items={sortedProduct} />
-        </div>
-        <div>
-          <TableData items={sortedProduct} />
+          <div>
+            <span>Tech</span>
+            <span>Garden</span>
+            <span>Home</span>
+          </div>
+          <div className="">
+            <TreeMap elementId="chart" items={sortedProduct} />
+          </div>
         </div>
       </div>
     </>

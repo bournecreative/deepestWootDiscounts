@@ -60,8 +60,8 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
         valueField: 'value',
         categoryField: 'name',
         childDataField: 'children',
-        nodePaddingOuter: 0,
-        nodePaddingInner: 0,
+        nodePaddingOuter: 5,
+        nodePaddingInner: 7,
       }),
     );
 
@@ -70,15 +70,9 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
       text: '${value}',
     });
 
-    series
-      ?.get('colors')
-      ?.set('colors', [
-        am5.color(0x095256),
-        am5.color(0x087f8c),
-        am5.color(0x5aaa95),
-        am5.color(0x86a873),
-        am5.color(0xbb9f06),
-      ]);
+    series.rectangles.template.setAll({
+      stroke: am5.color(0x141414),
+    });
 
     if (sortedData?.children[0].children.length) {
       series.rectangles.template.adapters.add('fill', function (_, target) {
@@ -87,15 +81,17 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
         const higher = topSavings * 0.75;
         const mid = topSavings * 0.5;
         const low = topSavings * 0.25;
-        if (value <= low) {
-          // console.log((target.dataItem?.dataContext as chartDataObj).value);
-          return am5.color(0x00ccbf);
-        } else if (value <= mid) {
-          return am5.color(0x3f7c85);
-        } else if (value <= higher) {
-          return am5.color(0xff5f5d);
+        const lowest = topSavings * 0.15;
+        if (value >= higher) {
+          return am5.color(0x0442bf);
+        } else if (value >= mid) {
+          return am5.color(0x0597f2);
+        } else if (value >= low) {
+          return am5.color(0xf2cb05);
+        } else if (value >= lowest) {
+          return am5.color(0xd96704);
         } else {
-          return am5.color(0x00ad76);
+          return am5.color(0x04bf9d);
         }
       });
 
@@ -129,7 +125,7 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
     <div
       ref={rootRef}
       id={elementId}
-      style={{ width: '100%', height: '100dvh' }}
+      style={{ width: '100%', height: '90dvh', background: '#141414' }}
     ></div>
   );
 };

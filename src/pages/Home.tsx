@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { TreeMap } from '../components/treemap';
-import { TableData } from '../components/table/Table';
+import { SelectionList } from '../components/selectionList/SelectionList';
 import './home-styles.scss';
 
 export interface WootItem {
@@ -31,7 +31,7 @@ export const Home = () => {
   const [products, setProducts] = useState<WootItem[]>([]);
   const [sortedProduct, setSortedProduct] = useState<WootItem[]>([]);
   const isMounted = useRef(true);
-  console.log('is Mounted', isMounted.current);
+
   const sortData = (data: WootItem[]) => {
     if (data) {
       const filtered = data
@@ -73,18 +73,14 @@ export const Home = () => {
     }
   }, [products]);
 
+  const listItems = ['Home', 'Electronic', 'Tools', 'Sport', 'Grocery'];
   return (
     <>
       <div className="container">
         <div>
-          <div>
-            <span>Tech</span>
-            <span>Garden</span>
-            <span>Home</span>
-          </div>
-          <div className="">
-            <TreeMap elementId="chart" items={sortedProduct} />
-          </div>
+          <h2 className="">Woot deal map</h2>
+          <SelectionList listItems={listItems} />
+          <TreeMap elementId="chart" items={sortedProduct} />
         </div>
       </div>
     </>

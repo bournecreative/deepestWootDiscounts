@@ -1,0 +1,30 @@
+.selectionList {
+  color: #f6f6f6;
+  display: flex;
+  list-style-type: none;
+  margin: 20px 0 20px 0;
+  padding: 0;
+
+  .selectionList_item {
+    cursor: pointer;
+    min-width: 150px;
+    padding-bottom: 8px;
+    position: relative;
+    text-align: center;
+    &::after {
+      content: '';
+      background-color: #d9d9d9;
+      bottom: 0;
+      height: 4px;
+      position: absolute;
+      left: 0;
+      width: 100%;
+    }
+  }
+  .selectionList_item--active {
+    @extend .selectionList_item;
+    &::after {
+      background-color: #ff4f4f;
+    }
+  }
+}

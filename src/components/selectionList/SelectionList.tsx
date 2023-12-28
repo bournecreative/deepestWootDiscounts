@@ -8,9 +8,11 @@ interface SelectionListProps {
 export const SelectionList: React.FC<SelectionListProps> = ({ listItems }) => {
   const [activeLink, setActiveLink] = useState(0);
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent) => {
+    const category = (e.target as HTMLElement).outerText;
+
     listItems.filter((i, index) => {
-      if (i === e.target.outerText) {
+      if (i === category) {
         setActiveLink(index);
       }
     });

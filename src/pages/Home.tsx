@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { TreeMap } from '../components/treemap';
-import { SelectionList } from '../components/selectionList/SelectionList';
-import './home-styles.scss';
+import { HeadingText } from '../components/headingText/HeadingText';
+import './home-module.scss';
 
 export interface WootItem {
   Categories: [];
@@ -30,7 +30,9 @@ export interface WootItem {
 export const Home = () => {
   const [products, setProducts] = useState<WootItem[]>([]);
   const [sortedProduct, setSortedProduct] = useState<WootItem[]>([]);
+
   const isMounted = useRef(true);
+  const parentContainer = useRef<HTMLDivElement | null>(null);
 
   const sortData = (data: WootItem[]) => {
     if (data) {
@@ -68,21 +70,26 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (isMounted) {
-      sortData(products);
-    }
+    sortData(products);
   }, [products]);
 
-  const listItems = ['Home', 'Electronic', 'Tools', 'Sport', 'Grocery'];
   return (
-    <>
-      <div className="container">
+    <div className="main">
+      <HeadingText content="Woot Top deals" headingType="h1" color="dark" />
+      <div ref={parentContainer} className="container">
         <div>
-          <h2 className="">Woot deal map</h2>
-          <SelectionList listItems={listItems} />
-          <TreeMap elementId="chart" items={sortedProduct} />
+          <HeadingText
+            content="Woot Top deals"
+            headingType="h4"
+            color="light"
+          />
         </div>
+        <TreeMap
+          elementId="chart"
+          items={sortedProduct}
+          wrapperEle={parentContainer}
+        />
       </div>
-    </>
+    </div>
   );
 };

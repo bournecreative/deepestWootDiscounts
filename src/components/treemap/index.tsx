@@ -3,6 +3,7 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5hierarchy from '@amcharts/amcharts5/hierarchy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import { WootItem } from '../../pages/Home';
+import './treemap-module.scss';
 
 interface TreeMapProps {
   items: WootItem[];
@@ -121,11 +122,5 @@ export const TreeMap: React.FC<TreeMapProps> = ({ items, elementId }) => {
     setSortedData(chartData);
   }, [items]);
 
-  return (
-    <div
-      ref={rootRef}
-      id={elementId}
-      style={{ width: '100%', height: '90dvh', background: '#141414' }}
-    ></div>
-  );
+  return <div className="chart_treepMap" ref={rootRef} id={elementId}></div>;
 };

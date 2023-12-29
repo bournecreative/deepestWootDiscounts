@@ -30,9 +30,7 @@ export interface WootItem {
 export const Home = () => {
   const [products, setProducts] = useState<WootItem[]>([]);
   const [sortedProduct, setSortedProduct] = useState<WootItem[]>([]);
-
   const isMounted = useRef(true);
-  const parentContainer = useRef<HTMLDivElement | null>(null);
 
   const sortData = (data: WootItem[]) => {
     if (data) {
@@ -76,7 +74,7 @@ export const Home = () => {
   return (
     <div className="main">
       <HeadingText content="Woot Top deals" headingType="h1" color="dark" />
-      <div ref={parentContainer} className="container">
+      <div className="container">
         <div>
           <HeadingText
             content="Woot Top deals"
@@ -84,11 +82,7 @@ export const Home = () => {
             color="light"
           />
         </div>
-        <TreeMap
-          elementId="chart"
-          items={sortedProduct}
-          wrapperEle={parentContainer}
-        />
+        <TreeMap elementId="chart" items={sortedProduct} />
       </div>
     </div>
   );
